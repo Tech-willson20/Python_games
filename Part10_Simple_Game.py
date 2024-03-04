@@ -1,52 +1,41 @@
-###########################
-## PART 10: Simple Game ###
-### --- CODEBREAKER --- ###
-## --Nope--Close--Match--  ##
-###########################
-
-# It's time to actually make a simple command line game so put together everything
-# you've learned so far about Python. The game goes like this:
-
-# 1. The computer will think of 3 digit number that has no repeating digits.
-# 2. You will then guess a 3 digit number
-# 3. The computer will then give back clues, the possible clues are:
-#
-#     Close: You've guessed a correct number but in the wrong position
-#     Match: You've guessed a correct number in the correct position
-#     Nope: You haven't guess any of the numbers correctly
-#
-# 4. Based on these clues you will guess again until you break the code with a
-#    perfect match!
-
-# There are a few things you will have to discover for yourself for this game!
-# Here are some useful hints:
-
-# Try to figure out what this code is doing and how it might be useful to you
 import random
-digits = list(range(10))
-random.shuffle(digits)
-print(digits[:3])
 
-# Another hint:
-print("Welcome to Wills Games \nYou are accept to input three differnet with space between them \t NOtice correct answer is reward with 0.2 cedis")
+# Generate a random 3-digit number with no repeating digits
+digits = random.sample(range(10), 3)
+print(digits)
+
+print("Welcome to Wills Games\nYou are expected to input three different digits with spaces between them.\nNotice: A correct answer is rewarded with 0.2 cedis")
 
 while True:
-    guess,x, y = input("What is your guess? ").split()
-    lis=[int(guess),int(x),int(y)]
-    
+    # Take user input for the guess
+    guess_input = input("What is your guess? ")
 
-    if lis == digits[:3]:
-        print("Correct guess")
+    # Check if the input is valid (contains exactly three digits)
+    if len(guess_input) != 3 or not guess_input.isdigit():
+        print("Invalid input. Please enter three digits.")
+        continue
+
+    # Convert the input to a list of integers
+    guess = [int(digit) for digit in guess_input]
+
+    # Check if the guess is correct
+    if guess == digits:
+        print("Correct guess! You win 0.2 cedis.")
         break
-    elif lis[0]== digits[0] or lis[1]== digits[1] or lis[2]== digits[2]  :
-        print("One of your input is correct and at the right space")
     else:
-        print("Worng Guess")
+        # Check for matching digits at the correct position
+        matches = [digit == digits[i] for i, digit in enumerate(guess)]
 
+        if any(matches):
+            print("Match: You've guessed a correct number in the correct position.")
+        else:
+            # Check for correct digits in the wrong position
+            close_matches = [digit in digits for digit in guess]
 
-# Think about how you will compare the input to the random number, what format
-# should they be in? Maybe some sort of sequence? Watch the Lecture video for more hints!
+            if any(close_matches):
+                print("Close: You've guessed a correct number but in the wrong position.")
+            else:
+                print("Nope: You haven't guessed any of the numbers correctly.")
 
-input("Please any key to quit")
-
-
+# End the game
+input("Press any key to quit")
